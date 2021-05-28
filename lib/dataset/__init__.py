@@ -10,6 +10,3 @@ from __future__ import print_function
 
 from .mpii import MPIIDataset as mpii
 from .coco import COCODataset as coco
-
-from .pose_track import PoseTrackDataset as pose_track
-from .posetrack import PoseTrackDataset as pose_track_15

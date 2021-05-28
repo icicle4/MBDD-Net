@@ -87,17 +87,6 @@ class JointsDataset(Dataset):
         c = db_rec['center']
         s = db_rec['scale']
         score = db_rec['score'] if 'score' in db_rec else 1
-        bbox = []
-        bbox_head = []
-        image_id = 0
-        seq_name = ""
-
-        if db_rec.get('bbox'):
-            bbox = db_rec['bbox']
-            bbox_head = db_rec['bbox_head']
-            image_id = db_rec['image_id']
-            seq_name = db_rec['seq_name']
-
         r = 0
 
         if self.is_train:
@@ -140,11 +129,7 @@ class JointsDataset(Dataset):
             'scale': s,
             'rotation': r,
             'score': score,
-            'filename': filename,
-            'seq_name': seq_name,
-            'bbox': bbox,
-            'bbox_head': bbox_head,
-            'image_id': image_id
+            'filename': filename
         }
         return input, target, target_weight, meta
 
