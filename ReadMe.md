@@ -3,26 +3,6 @@
 ## Introduction
 This is an official pytorch implementation of mypaper. </br>
 
-## Main Results
-### Results on MPII val
-| Arch | Head | Shoulder | Elbow | Wrist | Hip | Knee | Ankle | Mean | Mean@0.1|
-|---|---|---|---|---|---|---|---|---|---|
-| 256x256_pose_resnet_50_d256d256d256 | 96.351 | 95.329 | 88.989 | 83.176 | 88.420 | 83.960 | 79.594 | 88.532 | 33.911 |
-
-### Note:
-- Flip test is used.
-
-### Results on COCO val2017 with detector having human AP of 56.4 on COCO val2017 dataset
-| Arch | AP | Ap .5 | AP .75 | AP (M) | AP (L) | AR | AR .5 | AR .75 | AR (M) | AR (L) |
-|---|---|---|---|---|---|---|---|---|---|---|
-| 256x192_pose_resnet_50_d256d256d256 | 0.704 | 0.886 | 0.783 | 0.671 | 0.772 | 0.763 | 0.929 | 0.834 | 0.721 | 0.824 |
-
-
-### Note:
-- Flip test is used.
-- Person detector has person AP of 56.4 on COCO val2017 dataset.
-
-
 ## Quick start
 ### Installation
 1. Install pytorch >= v1.4.0 following [official instruction](https://pytorch.org/).
@@ -37,8 +17,8 @@ This is an official pytorch implementation of mypaper. </br>
    cd ${POSE_ROOT}/lib
    make
    
-   cd
-   
+   cd ${Deformable}
+   sh make.sh
    ```
 3. Install [COCOAPI](https://github.com/cocodataset/cocoapi):
    ```
@@ -53,35 +33,6 @@ This is an official pytorch implementation of mypaper. </br>
    ```
    Note that instructions like # COCOAPI=/path/to/install/cocoapi indicate that you should pick a path where you'd like to have the software cloned and then set an environment variable (COCOAPI in this case) accordingly.
 3. Download pytorch imagenet pretrained models from [pytorch model zoo](https://pytorch.org/docs/stable/model_zoo.html#module-torch.utils.model_zoo) and caffe-style pretrained models from [GoogleDrive](https://drive.google.com/drive/folders/1yJMSFOnmzwhA4YYQS71Uy7X1Kl_xq9fN?usp=sharing). 
-4. Download mpii and coco pretrained models from [OneDrive](https://1drv.ms/f/s!AhIXJn_J-blW0D5ZE4ArK9wk_fvw) or [GoogleDrive](https://drive.google.com/drive/folders/13_wJ6nC7my1KKouMkQMqyr9r1ZnLnukP?usp=sharing). Please download them under ${POSE_ROOT}/models/pytorch, and make them look like this:
-
-   ```
-   ${POSE_ROOT}
-    `-- models
-        `-- pytorch
-            |-- imagenet
-            |   |-- resnet50-19c8e357.pth
-            |   |-- resnet50-caffe.pth.tar
-            |   |-- resnet101-5d3b4d8f.pth
-            |   |-- resnet101-caffe.pth.tar
-            |   |-- resnet152-b121ed2d.pth
-            |   `-- resnet152-caffe.pth.tar
-            |-- pose_coco
-            |   |-- pose_resnet_101_256x192.pth.tar
-            |   |-- pose_resnet_101_384x288.pth.tar
-            |   |-- pose_resnet_152_256x192.pth.tar
-            |   |-- pose_resnet_152_384x288.pth.tar
-            |   |-- pose_resnet_50_256x192.pth.tar
-            |   `-- pose_resnet_50_384x288.pth.tar
-            `-- pose_mpii
-                |-- pose_resnet_101_256x256.pth.tar
-                |-- pose_resnet_101_384x384.pth.tar
-                |-- pose_resnet_152_256x256.pth.tar
-                |-- pose_resnet_152_384x384.pth.tar
-                |-- pose_resnet_50_256x256.pth.tar
-                `-- pose_resnet_50_384x384.pth.tar
-
-   ```
 
 4. Init output(training model output directory) and log(tensorboard log directory) directory:
 
@@ -147,50 +98,23 @@ ${POSE_ROOT}
                 |-- ... 
 ```
 
-### Valid on MPII using pretrained models
-
-```
-python pose_estimation/valid.py \
-    --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3.yaml \
-    --flip-test \
-    --model-file models/pytorch/pose_mpii/pose_resnet_50_256x256.pth.tar
-```
-
 ### Training on MPII
 
 ```
 python pose_estimation/train.py \
-    --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3.yaml
-```
-
-### Valid on COCO val2017 using pretrained models
-
-```
-python pose_estimation/valid.py \
-    --cfg experiments/coco/resnet50/256x192_d256x3_adam_lr1e-3.yaml \
-    --flip-test \
-    --model-file models/pytorch/pose_coco/pose_resnet_50_256x192.pth.tar
+    --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3_multi_branch_pose_resnet_deform_mpii.yaml
 ```
 
 ### Training on COCO train2017
 
 ```
 python pose_estimation/train.py \
-    --cfg experiments/coco/resnet50/256x192_d256x3_adam_lr1e-3.yaml
+    --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3_multi_branch_pose_resnet_deform_mpii.yaml
 ```
 
-### Other Implementations
-- TensorFlow [[Version1](https://github.com/mks0601/TF-SimpleHumanPose)]
-- PaddlePaddle [[Version1](https://github.com/PaddlePaddle/models/tree/develop/fluid/PaddleCV/human_pose_estimation)]
-- Gluon [[Version1](https://gluon-cv.mxnet.io/model_zoo/pose.html)]
+### Valid on COCO val2017
 
-### Citation
-If you use our code or models in your research, please cite with:
-```
-@inproceedings{xiao2018simple,
-    author={Xiao, Bin and Wu, Haiping and Wei, Yichen},
-    title={Simple Baselines for Human Pose Estimation and Tracking},
-    booktitle = {European Conference on Computer Vision (ECCV)},
-    year = {2018}
-}
-```
+python pose_estimation/valid \
+    --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3_multi_branch_pose_resnet_deform_mpii.yaml \
+    --flip-test
+
