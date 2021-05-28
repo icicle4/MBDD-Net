@@ -17,7 +17,7 @@ This is an official pytorch implementation of mypaper. </br>
    cd ${POSE_ROOT}/lib
    make
    
-   cd ${Deformable}
+   cd ${POSE_ROOT}/Deformable
    sh make.sh
    ```
 3. Install [COCOAPI](https://github.com/cocodataset/cocoapi):
@@ -114,7 +114,8 @@ python pose_estimation/train.py \
 
 ### Valid on COCO val2017
 
+```
 python pose_estimation/valid \
     --cfg experiments/mpii/resnet50/256x256_d256x3_adam_lr1e-3_multi_branch_pose_resnet_deform_mpii.yaml \
     --flip-test
-
+```
