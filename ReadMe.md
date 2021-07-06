@@ -1,4 +1,4 @@
-# Multi Branch Deformable Deconvluation Net
+# Multi Branch Deformable Deconvluation Net for Pose Estimation
 
 ## Introduction
 This is an official pytorch implementation of mypaper. </br>
