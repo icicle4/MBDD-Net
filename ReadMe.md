@@ -1,7 +1,7 @@
 # Multi Branch Deformable Deconvluation Net for Pose Estimation
 
 ## Introduction
-This is an official pytorch implementation of mypaper. </br>
+This is an official pytorch implementation of mypaper. I just find my idea is amost same as the paper(Bottom-Up Human Pose Estimation Via Disentangled Keypoint Regression). But I did this job earlier. </br> 
 
 ## Quick start
 ### Installation
